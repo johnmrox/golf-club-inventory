@@ -1,7 +1,8 @@
 <li>
-	<div club="$ctrl.club"><b>name: </b>{{$ctrl.club.name}}</div>
+	<div class="container" club="$ctrl.club"><b>name: </b>{{$ctrl.club.name}}</div>
 	<div club="$ctrl.club"><b>type: </b>{{$ctrl.club.type}}</div>
 	<div club="$ctrl.club"><b>price: $</b>{{$ctrl.club.price}}</div>
 </li>
 <button ng-click="$ctrl.handleEditClick($ctrl.club.name)" >Edit</button>
 <button ng-click="$ctrl.deleteClub($ctrl.club.name)" >Delete</button>
+<button ng-click="$ctrl.showOneClub($ctrl.club._id)">Show One</button>

@@ -1,6 +1,6 @@
 <div>
-  <golf-club-form handle-add-club="$ctrl.addClub"/>
-	<club-list delete-club="$ctrl.deleteOneClub" clubs="$ctrl.clubs" handle-edit-click="$ctrl.handleEditClick"/>
+  <golf-club-form handle-add-club="$ctrl.addClub" show-all-clubs="$ctrl.showAllClubs" show-one-club="$ctrl.showOneClub"/>
+	<club-list delete-club="$ctrl.deleteOneClub" clubs="$ctrl.clubs" handle-edit-click="$ctrl.handleEditClick" show-one-club="$ctrl.showOneClub"/>
 	<edit-entry-form show="$ctrl.show" club="$ctrl.editingClub" save-revised-club="$ctrl.saveRevisedClub"/>
 </div>
 

@@ -7,6 +7,8 @@ angular.module('clubApp')
 	controller: 'golfClubFormCtrl',
 	templateUrl: 'templates/golfClubForm.html',
 	bindings: {
-		handleAddClub: '<'
+		handleAddClub: '<',
+		showAllClubs: '<',
+		showOneClub: '<'
 	}
 });

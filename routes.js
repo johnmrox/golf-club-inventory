@@ -1,9 +1,9 @@
 var express = require('express');
-var util = require('./lib/utility');
+//var util = require('./lib/utility');
 var bodyParser = require('body-parser');
 var Club = require('./models/clubs');
 var handler = require('./lib/request-handler');
-
+var cors = require('cors');
 // var db = require('./app/config');
 // var Users = require('./app/collections/users');
 // var User = require('./app/models/user');
@@ -13,11 +13,14 @@ var handler = require('./lib/request-handler');
 
 var app = express();
 
+app.use(cors());
+
+
 // Parse JSON (uniform resource locators)
 app.use(bodyParser.json());
 // Parse forms (signup/login)
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/'));
 
 // app.get('/john', function(req, res) { //new
 //   res.status(200);
@@ -34,9 +37,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/clubs', handler.findAllClubs);
 
+app.get('/clubs/:name', handler.findOneClub);
+
 ////////////////app.post('/john', function(req, res) { //new
 app.post('/clubs', handler.addClub);
 
+app.delete('/clubs/:name', handler.deleteClub);
+
+app.put('/clubs/:name', handler.updateClub);
 //////////////////////////////////////////////////////
 
 app.get('*', function(req, res) { //new

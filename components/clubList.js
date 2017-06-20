@@ -5,6 +5,7 @@ angular.module('clubApp')
 	bindings: {
 		clubs: '<',
 		deleteClub: '<',
-		handleEditClick: '<'
+		handleEditClick: '<',
+		showOneClub: '<'
 	}
 });

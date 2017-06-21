@@ -1,53 +1,42 @@
-var golfClubs = {
-	clubs: [
-		// {
-		// 	type: 'driver',
-		// 	name: 'Callaway',
-		// 	price: 199
-		// },
-		// {
-		// 	type: 'putter',
-		// 	name: 'Titleist',
-		// 	price: 99
-		// },
-		// {
-		// 	type: 'wedge',
-		// 	name: 'Orlimar',
-		// 	price: 150
-		// }
-	],
-	deleteClub: function(brandName) {
-		var deletingClubIndex = this.findOneClubIndex(brandName);
+// var golfClubs = {
+// 	clubs: [
+// 		// {
+// 		// 	type: 'driver',
+// 		// 	name: 'Callaway',
+// 		// 	price: 199
+// 		// },
+// 		// {
+// 		// 	type: 'putter',
+// 		// 	name: 'Titleist',
+// 		// 	price: 99
+// 		// },
+// 		// {
+// 		// 	type: 'wedge',
+// 		// 	name: 'Orlimar',
+// 		// 	price: 150
+// 		// }
+// 	],
+// 	deleteClub: function(brandName) {
+// 		var deletingClubIndex = this.findOneClubIndex(brandName);
 
-		this.clubs.splice(deletingClubIndex, 1);
-	},
-	// editClub: function(brandName, revisedClub) {
-	// 	var editingClubIndex = this.findOneClubIndex(brandName);
-	// 	// console.log(this.clubs);
-	// 	// console.log('index:', editingClubIndex)
-	// 	this.clubs[editingClubIndex] = revisedClub;
-	// },
-	findOneClubIndex: function(clubName) {
-
-
-		this.$http({
-			method:'GET', 
-			url: 'http://localhost:8080/clubs'
-		}).then(function(clubs) {
-			console.log(clubs);
-		}, function() {
-			console.log('error');
-		});
-
-		var foundClubIndex;
-		this.clubs.forEach(function(club, index) {
-			if (club.name === clubName) {
-				foundClubIndex = index;
-			}
-		});
-		return foundClubIndex;
-	}
-}
+// 		this.clubs.splice(deletingClubIndex, 1);
+// 	},
+// 	// editClub: function(brandName, revisedClub) {
+// 	// 	var editingClubIndex = this.findOneClubIndex(brandName);
+// 	// 	// console.log(this.clubs);
+// 	// 	// console.log('index:', editingClubIndex)
+// 	// 	this.clubs[editingClubIndex] = revisedClub;
+// 	// },
+// 	findOneClubIndex: function(clubName) {
+// 		var foundClubIndex;
+// 		this.clubs.forEach(function(club, index) {
+// 			if (club.name === clubName) {
+// 				foundClubIndex = index;
+// 			}
+// 		});
+// 		return foundClubIndex;
+// 	}
+// }
 
 angular.module('clubApp', [])
 .controller('AppCtrl', function($http) {
@@ -56,76 +45,120 @@ angular.module('clubApp', [])
 	// 	alert('I\'ve been clicked');
 	// };
 	this.$http = $http;
-	this.clubs = golfClubs.clubs;
 	this.editingClub = {};
 	this.name;
 	this.show;
-	//console.log(this.editingClub)
 
-	this.render = function() {
-
-	}
-
-	this.render();
+	this.clubs;
+	this.foundIndex = 10;
+	//console.log('this.clubs:', this.clubs);
 
 	this.showAllClubs = function() {
-		
+		//console.log('foundIndex:', this.foundIndex);
+		this.$http({
+			method:'GET', 
+			url: 'http://localhost:8080/clubs'
+		}).then(function(returnedClubs) {
+			this.clubs = returnedClubs.data;
+			this.clubs = this.clubs.map(function(club) {
+				club.showClub = false;
+				return club;
+			});
+			//console.log(this.clubs);
+		}.bind(this), function() {
+			console.log('error');
+		});
+	}.bind(this);
+
+	this.showAllClubs();
+
+	// this.render = function() {
+	// 	this.showAllClubs();
+	// };	
+
+	//this.render();
+	this.findOneClubIndex = function(clubId, callback) {
 		this.$http({
 			method:'GET', 
 			url: 'http://localhost:8080/clubs'
 		}).then(function(clubs) {
-			console.log(clubs);
+			// console.log('clubs data:', clubs.data)
+			clubs.data.forEach(function(club, index) {
+				if (club._id === clubId) {
+					// foundClubIndex = index;
+					callback(index);
+				}
+			});
+			//return foundClubIndex;
 		}, function() {
 			console.log('error');
 		});
-
-
-	}.bind(this);
+	};
 
 	this.showOneClub = function(clubId) {
 		this.$http({
 			method:'GET', 
-			url: 'http://localhost:8080/clubs'
-		}).then(function(clubs) {
-			console.log('club id:', clubId)
-			console.log(clubs);
+			url: 'http://localhost:8080/clubs/' + clubId
+		}).then(function(club) {
+			//console.log('club id:', clubId)
+			console.log(club);
 		}, function() {
 			console.log('error');
 		});
 
-		alert(clubId);
 	}.bind(this);
 
-	this.handleEditClick = function(clubName) {
-		var clubIndex = golfClubs.findOneClubIndex(clubName);
-
-		this.editingClub.type = golfClubs.clubs[clubIndex].type;
-		this.editingClub.name = golfClubs.clubs[clubIndex].name;
-		this.editingClub.price = golfClubs.clubs[clubIndex].price;
-
-		this.name = this.editingClub.name;
+	this.handleEditClick = function(clubId) {
 		this.show = true;
+		console.log('edit this.show: ', this.show);
+		//console.log('club id:', clubId)
+		this.findOneClubIndex(clubId, function(clubIndex) {
+
+			this.editingClub.type = this.clubs[clubIndex].type;
+			this.editingClub.name = this.clubs[clubIndex].name;
+			this.editingClub.price = this.clubs[clubIndex].price;
+			this.editingClub._id = this.clubs[clubIndex]._id;
+				//this.name = this.editingClub.name;
+		}.bind(this));
+
+
 		//console.log('this name:', this.editingClub.name);
 	}.bind(this);
 
-	this.deleteOneClub = function(clubName) {
-		golfClubs.deleteClub(clubName);
-	};
+	this.deleteOneClub = function(clubId) {
+		//console.log(clubId);
+		this.$http({
+			method:'DELETE', 
+			url: 'http://localhost:8080/clubs/' + clubId,
+		}).then(function() {
+			this.showAllClubs();
+			//this.name = this.editingClub.name;
+
+		}.bind(this), function() {
+			console.log('error');
+		});
+	}.bind(this);
 
 	// this.saveRevisedClub = function(clubName, revisedClub) {
 	this.saveRevisedClub = function() {
-		//console.log('this.name:', this.name);
-		//console.log(this.editingClub.type)
-		var clubIndex = golfClubs.findOneClubIndex(this.name);
-		//console.log('club index:', clubIndex);
+		//need club id and edited fields
 
-		golfClubs.clubs[clubIndex].type = this.editingClub.type;
-		golfClubs.clubs[clubIndex].name = this.editingClub.name;
-		golfClubs.clubs[clubIndex].price = this.editingClub.price;
+		//can get rid of and
+		this.$http({
+			method:'PUT', 
+			url: 'http://localhost:8080/clubs/' + this.editingClub._id,
+			data: {
+				name: this.editingClub.name,
+				type: this.editingClub.type,
+				price: this.editingClub.price
+			}
+		}).then(function() {
+			this.showAllClubs();
+			//this.name = this.editingClub.name;
 
-		// this.editingClub.type = "";
-		// this.editingClub.name = "";
-		// this.editingClub.price = "";
+		}.bind(this), function() {
+			console.log('error');
+		});
 
 		this.show = false;
 		//golfClubs.editClub(clubName, revisedClub);
@@ -146,16 +179,13 @@ angular.module('clubApp', [])
 			console.log('error');
 		});
 
-
-		golfClubs.clubs.unshift({name: newClub.name, type: newClub.type, price: newClub.price});
+		this.clubs.push({name: newClub.name, type: newClub.type, price: newClub.price});
 
 		newClub.name = "";
 		newClub.type = "";
 		newClub.price = "";
 	}.bind(this);
 })
-
-//how do i clear the clubBrand?
 
 .component('app', {
 	controller: 'AppCtrl',

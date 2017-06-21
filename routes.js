@@ -37,19 +37,19 @@ app.use(express.static(__dirname + '/'));
 
 app.get('/clubs', handler.findAllClubs);
 
-app.get('/clubs/:name', handler.findOneClub);
+app.get('/clubs/:_id', handler.findOneClub);
 
 ////////////////app.post('/john', function(req, res) { //new
 app.post('/clubs', handler.addClub);
 
-app.delete('/clubs/:name', handler.deleteClub);
+app.delete('/clubs/:_id', handler.deleteClub);
 
-app.put('/clubs/:name', handler.updateClub);
+app.put('/clubs/:_id', handler.updateClub);
 //////////////////////////////////////////////////////
 
 app.get('*', function(req, res) { //new
   res.status(200);
-  res.send('something elses\n');
+  res.send('catchall route\n');
 });
 
 module.exports = app;

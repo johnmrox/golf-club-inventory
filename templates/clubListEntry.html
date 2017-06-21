@@ -3,6 +3,11 @@
 	<div club="$ctrl.club"><b>type: </b>{{$ctrl.club.type}}</div>
 	<div club="$ctrl.club"><b>price: $</b>{{$ctrl.club.price}}</div>
 </li>
-<button ng-click="$ctrl.handleEditClick($ctrl.club.name)" >Edit</button>
-<button ng-click="$ctrl.deleteClub($ctrl.club.name)" >Delete</button>
-<button ng-click="$ctrl.showOneClub($ctrl.club._id)">Show One</button>
+<button ng-click="$ctrl.handleEditClick($ctrl.club._id)" >Edit</button>
+<button ng-click="$ctrl.deleteClub($ctrl.club._id)" >Delete</button>
+<button ng-click="$ctrl.show()">Show One</button><br>
+<div ng-if="$ctrl.club.showClub">
+	<input type="text" placeholder="name" ng-disabled="true" ng-model="$ctrl.showingName"></input>
+	<input type="text" placeholder="type" ng-disabled="true" ng-model="$ctrl.showingType"></input>
+	<input type="number" placeholder="price" ng-disabled="true" ng-model="$ctrl.showingPrice"></input>
+</div>
